@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.login_check_timer = new System.Windows.Forms.Timer(this.components);
             this.memory_manager_timer = new System.Windows.Forms.Timer(this.components);
             this.BrowserPanel = new System.Windows.Forms.Panel();
@@ -176,6 +177,7 @@
             this.Controls.Add(this.BrowserPanel);
             this.Controls.Add(this.TitlePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
