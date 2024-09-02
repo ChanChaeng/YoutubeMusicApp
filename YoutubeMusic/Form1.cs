@@ -359,8 +359,16 @@ namespace YoutubeMusic
             if (this.WindowState == FormWindowState.Maximized) this.WindowState = FormWindowState.Normal;
             ToggleFullScreen(false);
 
-            if (enbled) this.Size = new Size(1160, 90 + TitlePanel.Height);
-            else SimpleToOriginResolution(0.8f);
+            if (enbled)
+            {
+                this.Size = new Size(1160, 90 + TitlePanel.Height);
+                this.Padding = new Padding(0, 0, 0, 0); // Form size adjustment becomes impossible
+            }
+            else
+            {
+                SimpleToOriginResolution(0.8f);
+                this.Padding = new Padding(1, 1, 1, 1);
+            }
         }
 
         private async void SimpleModeButton_Click(object sender, EventArgs e)
