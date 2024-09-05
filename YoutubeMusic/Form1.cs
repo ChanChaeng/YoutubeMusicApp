@@ -367,7 +367,7 @@ namespace YoutubeMusic
             else
             {
                 SimpleToOriginResolution(0.8f);
-                this.Padding = new Padding(1, 1, 1, 1);
+                this.Padding = new Padding(4, 4, 4, 4);
             }
         }
 
