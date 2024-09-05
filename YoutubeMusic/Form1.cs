@@ -1,4 +1,5 @@
-﻿using CefSharp;
+﻿using ReaLTaiizor.Controls;
+using CefSharp;
 using CefSharp.DevTools.LayerTree;
 using CefSharp.WinForms;
 using System;
@@ -18,7 +19,7 @@ using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using YoutubeMusic.Extension;
-using static System.Net.WebRequestMethods;
+using Panel = ReaLTaiizor.Controls.Panel;
 
 namespace YoutubeMusic
 {
@@ -45,7 +46,7 @@ namespace YoutubeMusic
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WM_NCHITTEST)
+            if (!Config.IsSimpleMode && m.Msg == WM_NCHITTEST)
             {
                 var cursorPos = this.PointToClient(Cursor.Position);
                 const int resizeAreaSize = 10;
@@ -120,8 +121,10 @@ namespace YoutubeMusic
             var originalLocation = this.Location;
 
             //메인 모니터 해상도 가져오기
-            var primaryScreen = Screen.PrimaryScreen;
-            var resolution = primaryScreen.Bounds;
+            var currentScreen = Screen.FromControl(this); // 'this'는 현재 폼을 나타냄
+            var resolution = currentScreen.Bounds; // 해상도 정보
+            //var primaryScreen = Screen.PrimaryScreen;
+            //var resolution = primaryScreen.Bounds;
 
             // 새로운 크기 계산
             int newWidth = (int)(resolution.Width * scale);
@@ -141,21 +144,6 @@ namespace YoutubeMusic
             return currentScreenWidth / baseScreenWidth;
         }
 
-        private void ResizeFontWithResolution(Control control)
-        {
-            float scaleFactor = GetResolutionScaleFactor();
-            float newFontSize = control.Font.Size * scaleFactor;
-
-            control.Font = new Font(
-                control.Font.FontFamily,
-                newFontSize,                // New Font Size
-                control.Font.Style,
-                control.Font.Unit,
-                control.Font.GdiCharSet,
-                control.Font.GdiVerticalFont
-            );
-        }
-
         private int GetTitleBarHeight()
         {
             int titleBarHeight = SystemInformation.CaptionHeight;
@@ -167,13 +155,6 @@ namespace YoutubeMusic
             int titleHeight = GetTitleBarHeight();
             TitlePanel.Height = titleHeight;
 
-            // Font scaling
-            ResizeFontWithResolution(BackButton);
-            ResizeFontWithResolution(SimpleModeButton);
-            ResizeFontWithResolution(Minimize_Button);
-            ResizeFontWithResolution(MaximizeButton);
-            ResizeFontWithResolution(ExitButton);
-
             // Rectangle Button
             BackButton.Size = new Size(titleHeight + 10, titleHeight);
             SimpleModeButton.Size = new Size(titleHeight + 10, titleHeight);
@@ -183,9 +164,6 @@ namespace YoutubeMusic
             MaximizeButton.Size = new Size(titleHeight, titleHeight);
             ExitButton.Size = new Size(titleHeight, titleHeight);
 
-            // browser initialization is in Program.cs
-            BrowserPanel.Controls.Add(Config.browser);
-
             // Form Resize and CenterStart
             ResizeFormWithResolution(scale: 0.8f);
         }
@@ -193,6 +171,9 @@ namespace YoutubeMusic
         private async void YoutubeMusic_Load(object sender, EventArgs e)
         {
             InitUI();
+
+            // browser initialization is in Program.cs
+            BrowserPanel.Controls.Add(Config.browser);
 
             // Covers the white background with a background color while waiting for the page to load
             Panel overlayPanel = new Panel
@@ -315,7 +296,7 @@ namespace YoutubeMusic
 
         private void Form1_MouseHover(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.SizeWE;
+            if (!Config.IsSimpleMode) this.Cursor = Cursors.SizeWE;
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -345,8 +326,6 @@ namespace YoutubeMusic
 
         private async Task ChangeSimpleMode(bool enbled)
         {
-            if (await YMusicEx.IsVideoPlay()) return;
-
             await YMusicEx.ChangeZIndexAsync(enbled);
             await YMusicEx.DisableDrawerAsync(enbled);
             await YMusicEx.DisableScrollAsync(enbled);
@@ -359,16 +338,8 @@ namespace YoutubeMusic
             if (this.WindowState == FormWindowState.Maximized) this.WindowState = FormWindowState.Normal;
             ToggleFullScreen(false);
 
-            if (enbled)
-            {
-                this.Size = new Size(1160, 90 + TitlePanel.Height);
-                this.Padding = new Padding(0, 0, 0, 0); // Form size adjustment becomes impossible
-            }
-            else
-            {
-                SimpleToOriginResolution(0.8f);
-                this.Padding = new Padding(4, 4, 4, 4);
-            }
+            if (enbled) this.Size = new Size(1160, 90 + TitlePanel.Height);
+            else SimpleToOriginResolution(0.8f);
         }
 
         private async void SimpleModeButton_Click(object sender, EventArgs e)
@@ -376,8 +347,13 @@ namespace YoutubeMusic
             this.ActiveControl = null;
             if (await YMusicEx.IsPlayerBar())
             {
+                if (!Config.IsSimpleMode && await YMusicEx.IsVideoPlay()) return;
+
                 Config.IsSimpleMode = !Config.IsSimpleMode;
                 await ChangeSimpleMode(Config.IsSimpleMode);
+
+                if (Config.IsSimpleMode) SimpleModeButton.BackgroundImage = Properties.Resources.ZoomIn_White_320;
+                else SimpleModeButton.BackgroundImage = Properties.Resources.ZoomOut_White_320;
             }
         }
 
@@ -409,6 +385,11 @@ namespace YoutubeMusic
         private void TitlePanel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left) TitleBar.Move(Handle);
+        }
+
+        private void Form1_Move(object sender, EventArgs e)
+        {
+            if (!Config.IsSimpleMode) InitUI();
         }
     }
 }

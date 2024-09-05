@@ -34,12 +34,12 @@
             this.memory_manager_timer = new System.Windows.Forms.Timer(this.components);
             this.BrowserPanel = new System.Windows.Forms.Panel();
             this.TitlePanel = new System.Windows.Forms.Panel();
+            this.SpacePanel = new System.Windows.Forms.Panel();
             this.SimpleModeButton = new System.Windows.Forms.Button();
             this.BackButton = new System.Windows.Forms.Button();
             this.Minimize_Button = new System.Windows.Forms.Button();
             this.MaximizeButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
-            this.SpacePanel = new System.Windows.Forms.Panel();
             this.TitlePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,9 +78,20 @@
             this.TitlePanel.TabIndex = 1;
             this.TitlePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TitlePanel_MouseDown);
             // 
+            // SpacePanel
+            // 
+            this.SpacePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(19)))), ((int)(((byte)(19)))));
+            this.SpacePanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SpacePanel.Location = new System.Drawing.Point(4, 37);
+            this.SpacePanel.Name = "SpacePanel";
+            this.SpacePanel.Size = new System.Drawing.Size(792, 1);
+            this.SpacePanel.TabIndex = 2;
+            // 
             // SimpleModeButton
             // 
             this.SimpleModeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.SimpleModeButton.BackgroundImage = global::YoutubeMusic.Properties.Resources.ZoomOut_White_320;
+            this.SimpleModeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.SimpleModeButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.SimpleModeButton.FlatAppearance.BorderSize = 0;
             this.SimpleModeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -90,13 +101,14 @@
             this.SimpleModeButton.Name = "SimpleModeButton";
             this.SimpleModeButton.Size = new System.Drawing.Size(32, 32);
             this.SimpleModeButton.TabIndex = 5;
-            this.SimpleModeButton.Text = "♪";
             this.SimpleModeButton.UseVisualStyleBackColor = false;
             this.SimpleModeButton.Click += new System.EventHandler(this.SimpleModeButton_Click);
             // 
             // BackButton
             // 
             this.BackButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.BackButton.BackgroundImage = global::YoutubeMusic.Properties.Resources.Back_White_384;
+            this.BackButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.BackButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.BackButton.FlatAppearance.BorderSize = 0;
             this.BackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -106,13 +118,14 @@
             this.BackButton.Name = "BackButton";
             this.BackButton.Size = new System.Drawing.Size(32, 32);
             this.BackButton.TabIndex = 4;
-            this.BackButton.Text = "←";
             this.BackButton.UseVisualStyleBackColor = false;
             this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // Minimize_Button
             // 
             this.Minimize_Button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.Minimize_Button.BackgroundImage = global::YoutubeMusic.Properties.Resources.Minimize_White_224;
+            this.Minimize_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.Minimize_Button.Dock = System.Windows.Forms.DockStyle.Right;
             this.Minimize_Button.FlatAppearance.BorderSize = 0;
             this.Minimize_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -122,13 +135,14 @@
             this.Minimize_Button.Name = "Minimize_Button";
             this.Minimize_Button.Size = new System.Drawing.Size(32, 32);
             this.Minimize_Button.TabIndex = 3;
-            this.Minimize_Button.Text = "─";
             this.Minimize_Button.UseVisualStyleBackColor = false;
             this.Minimize_Button.Click += new System.EventHandler(this.Minimize_Button_Click);
             // 
             // MaximizeButton
             // 
             this.MaximizeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.MaximizeButton.BackgroundImage = global::YoutubeMusic.Properties.Resources.Maximize_White_320;
+            this.MaximizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.MaximizeButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.MaximizeButton.FlatAppearance.BorderSize = 0;
             this.MaximizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -138,13 +152,14 @@
             this.MaximizeButton.Name = "MaximizeButton";
             this.MaximizeButton.Size = new System.Drawing.Size(32, 32);
             this.MaximizeButton.TabIndex = 2;
-            this.MaximizeButton.Text = "⬜";
             this.MaximizeButton.UseVisualStyleBackColor = false;
             this.MaximizeButton.Click += new System.EventHandler(this.MaximizeButton_Click);
             // 
             // ExitButton
             // 
             this.ExitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.ExitButton.BackgroundImage = global::YoutubeMusic.Properties.Resources.Exit_White_224;
+            this.ExitButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ExitButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.ExitButton.FlatAppearance.BorderSize = 0;
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -154,18 +169,8 @@
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(32, 32);
             this.ExitButton.TabIndex = 0;
-            this.ExitButton.Text = "✕";
             this.ExitButton.UseVisualStyleBackColor = false;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
-            // 
-            // SpacePanel
-            // 
-            this.SpacePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(19)))), ((int)(((byte)(19)))));
-            this.SpacePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SpacePanel.Location = new System.Drawing.Point(4, 37);
-            this.SpacePanel.Name = "SpacePanel";
-            this.SpacePanel.Size = new System.Drawing.Size(792, 1);
-            this.SpacePanel.TabIndex = 2;
             // 
             // Form1
             // 
@@ -186,6 +191,7 @@
             this.Load += new System.EventHandler(this.YoutubeMusic_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.MouseHover += new System.EventHandler(this.Form1_MouseHover);
+            this.Move += new System.EventHandler(this.Form1_Move);
             this.TitlePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

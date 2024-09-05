@@ -53,6 +53,9 @@
     <Reference Include="CefSharp.WinForms, Version=127.3.50.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
       <HintPath>..\packages\CefSharp.WinForms.127.3.50\lib\net462\CefSharp.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="ReaLTaiizor">
+      <HintPath>..\..\..\..\Downloads\ReaLTaiizor.Store\net48\ReaLTaiizor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -84,18 +87,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -104,6 +108,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back_White_384.png" />
+    <None Include="Resources\ZoomIn_White_320.png" />
+    <None Include="Resources\ZoomOut_White_320.png" />
+    <None Include="Resources\Minimize_White_224.png" />
+    <None Include="Resources\Maximize_White_320.png" />
+    <None Include="Resources\Exit_White_224.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="youtube_music.ico" />
