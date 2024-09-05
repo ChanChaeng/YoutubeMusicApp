@@ -1,25 +1,15 @@
-﻿using ReaLTaiizor.Controls;
-using CefSharp;
-using CefSharp.DevTools.LayerTree;
-using CefSharp.WinForms;
+﻿using CefSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using YoutubeMusic.Extension;
-using Panel = ReaLTaiizor.Controls.Panel;
 
 namespace YoutubeMusic
 {
@@ -147,7 +137,7 @@ namespace YoutubeMusic
         private int GetTitleBarHeight()
         {
             int titleBarHeight = SystemInformation.CaptionHeight;
-            return (int)(titleBarHeight * 1.5f);
+            return (int)(titleBarHeight * 1.25f);
         }
 
         private void InitUI()
