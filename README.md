@@ -35,4 +35,4 @@ Playwright로 크롬 대신 엣지를 사용할 때 PWA기반인 유튜브 뮤�
 <br><br>
 
 ### 캐시 및 쿠키 삭제 (로그인 정보 삭제)
-- C:\Users\UserName\AppData\Local\YouTubeMusicApp\Cache 폴더 삭제
+- `C:\Users\UserName\AppData\Local\YouTubeMusicApp\Cache` 폴더 삭제
