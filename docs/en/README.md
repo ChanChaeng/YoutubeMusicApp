@@ -28,3 +28,7 @@ so I wanted to listen to music while doing that work, so I created this program 
 - Average - 30~40/MB
 - Maximum - 100~250/MB (intermittent memory usage increases)
 - I implemented the function simply by referring to [Firemin](https://github.com/Sylfaen2/Firemin)
+<br><br>
+
+### Delete cache and cookies (Delete login session)
+- `C:\Users\UserName\AppData\Local\YouTubeMusicApp\Cache` Delete folder
