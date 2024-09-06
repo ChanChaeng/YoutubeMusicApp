@@ -316,6 +316,9 @@ namespace YoutubeMusic
 
         private async Task ChangeSimpleMode(bool enbled)
         {
+            //stuttering effect by first reducing the form size before hiding the elements
+            if (enbled) this.Size = new Size(1160, 90 + TitlePanel.Height);
+
             await YMusicEx.ChangeZIndexAsync(enbled);
             await YMusicEx.DisableDrawerAsync(enbled);
             await YMusicEx.DisableScrollAsync(enbled);
@@ -328,8 +331,7 @@ namespace YoutubeMusic
             if (this.WindowState == FormWindowState.Maximized) this.WindowState = FormWindowState.Normal;
             ToggleFullScreen(false);
 
-            if (enbled) this.Size = new Size(1160, 90 + TitlePanel.Height);
-            else SimpleToOriginResolution(0.8f);
+            if (!enbled) SimpleToOriginResolution(0.8f);
         }
 
         private async void SimpleModeButton_Click(object sender, EventArgs e)
