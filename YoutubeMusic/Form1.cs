@@ -17,11 +17,14 @@ namespace YoutubeMusic
 {
     public partial class Form1 : Form
     {
+        public static Form Instance;
+
         public Form1()
         {
             InitializeComponent();
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.DoubleBuffered = true;
+            Instance = this;
         }
 
         // Form Border
@@ -50,7 +53,7 @@ namespace YoutubeMusic
                 const int thickness = 30;
                 const int areaSize = 10;
 
-                if (cursorPos.Y < GetTitleBarHeight()) m.Result = IntPtr.Zero;
+                if (cursorPos.Y < FormEx.GetTitleBarHeight()) m.Result = IntPtr.Zero;
                 else if(cursorPos.X >= this.ClientSize.Width - thickness) // Right edge
                 {
                     m.Result = cursorPos.Y >= this.ClientSize.Height - areaSize ? (IntPtr)HTBOTTOMRIGHT : (IntPtr)HTRIGHT;
@@ -64,79 +67,9 @@ namespace YoutubeMusic
             base.WndProc(ref m);
         }
 
-        private void SimpleToOriginResolution(float scale)
-        {
-            // 현재 폼의 원래 크기 및 위치를 저장
-            var originalSize = this.Size;
-            var originalLocation = this.Location;
-
-            // 메인 모니터 해상도 가져오기
-            var primaryScreen = Screen.PrimaryScreen;
-            var resolution = primaryScreen.Bounds;
-
-            // 새로운 크기 계산
-            int newWidth = (int)(resolution.Width * scale);
-            int newHeight = (int)(resolution.Height * scale);
-
-            // 폼의 새 크기가 모니터 해상도를 초과하지 않도록 조정
-            newWidth = Math.Min(newWidth, resolution.Width);
-            newHeight = Math.Min(newHeight, resolution.Height);
-
-            // 폼의 크기를 조정
-            this.Size = new Size(newWidth, newHeight);
-
-            // 크기 조정 후 위치를 조정하여 타이틀바의 좌측 상단이 고정되도록 설정
-            this.Location = new Point(originalLocation.X, originalLocation.Y);
-
-            // 추가적으로, 폼이 화면 밖으로 나가지 않도록 보정
-            var formBounds = new Rectangle(this.Location, this.Size);
-            if (!resolution.Contains(formBounds))
-            {
-                int newX = Math.Max(resolution.X, Math.Min(resolution.Right - this.Width, this.Location.X));
-                int newY = Math.Max(resolution.Y, Math.Min(resolution.Bottom - this.Height, this.Location.Y));
-                this.Location = new Point(newX, newY);
-            }
-        }
-
-        private void ResizeFormWithResolution(float scale)
-        {
-            // 현재 폼의 원래 크기 및 위치를 저장
-            var originalSize = this.Size;
-            var originalLocation = this.Location;
-
-            //메인 모니터 해상도 가져오기
-            var currentScreen = Screen.FromControl(this); // 'this'는 현재 폼을 나타냄
-            var resolution = currentScreen.Bounds; // 해상도 정보
-            //var primaryScreen = Screen.PrimaryScreen;
-            //var resolution = primaryScreen.Bounds;
-
-            // 새로운 크기 계산
-            int newWidth = (int)(resolution.Width * scale);
-            int newHeight = (int)(resolution.Height * scale);
-            this.Size = new Size(newWidth, newHeight);
-
-            // 크기 조정 후 위치를 원래대로 조정
-            int offsetX = (originalSize.Width - this.Width) / 2;
-            int offsetY = (originalSize.Height - this.Height) / 2;
-            this.Location = new Point(originalLocation.X + offsetX, originalLocation.Y + offsetY);
-        }
-
-        private float GetResolutionScaleFactor()
-        {
-            float baseScreenWidth = 1920;
-            float currentScreenWidth = Screen.PrimaryScreen.Bounds.Width;
-            return currentScreenWidth / baseScreenWidth;
-        }
-
-        private int GetTitleBarHeight()
-        {
-            int titleBarHeight = SystemInformation.CaptionHeight;
-            return (int)(titleBarHeight * 1.25f);
-        }
-
         private void InitUI()
         {
-            int titleHeight = GetTitleBarHeight();
+            int titleHeight = FormEx.GetTitleBarHeight();
             TitlePanel.Height = titleHeight;
 
             // Rectangle Button
@@ -149,7 +82,7 @@ namespace YoutubeMusic
             ExitButton.Size = new Size(titleHeight, titleHeight);
 
             // Form Resize and CenterStart
-            ResizeFormWithResolution(scale: 0.8f);
+            FormEx.ResizeFormWithResolution(scale: 0.8f);
         }
 
         private EventHandler<FrameLoadEndEventArgs> handler = null;
@@ -199,7 +132,7 @@ namespace YoutubeMusic
             // Choose whether to show the title bar based on the mouse position in full screen mode
             Invoke((MethodInvoker)delegate ()
             {
-                int titleHeight = GetTitleBarHeight();
+                int titleHeight = FormEx.GetTitleBarHeight();
                 if (mouseY <= titleHeight)
                 {
                     TitlePanel.Height = titleHeight;
@@ -299,42 +232,27 @@ namespace YoutubeMusic
             if (this.WindowState == FormWindowState.Maximized) this.WindowState = FormWindowState.Normal;
             ToggleFullScreen(false);
 
-            if (!enbled) SimpleToOriginResolution(0.8f);
+            if (!enbled) FormEx.SimpleToOriginResolution(0.8f);
         }
 
         private async void SimpleModeButton_Click(object sender, EventArgs e)
         {
             this.ActiveControl = null;
-            if (await YMusicEx.IsPlayerBar())
-            {
-                if (!Config.IsSimpleMode && await YMusicEx.IsVideoPlay()) return;
+            if (!await YMusicEx.IsPlayerBar()) return;
+            if (!Config.IsSimpleMode && await YMusicEx.IsVideoPlay()) return;
 
-                Config.IsSimpleMode = !Config.IsSimpleMode;
-                await ChangeSimpleMode(Config.IsSimpleMode);
-
-                if (Config.IsSimpleMode) SimpleModeButton.BackgroundImage = Properties.Resources.ZoomIn_White_320;
-                else SimpleModeButton.BackgroundImage = Properties.Resources.ZoomOut_White_320;
-            }
+            Config.IsSimpleMode = !Config.IsSimpleMode;
+            await ChangeSimpleMode(Config.IsSimpleMode);
+            SimpleModeButton.BackgroundImage = Config.IsSimpleMode ? Properties.Resources.ZoomIn_White_320 : Properties.Resources.ZoomOut_White_320;
         }
 
         private void ToggleFullScreen(bool isMaximized)
         {
-            if (isMaximized)
-            {
-                TitlePanel.Visible = false;
-                TitlePanel.Height = 0;
-                SpacePanel.Visible = false;
-                SpacePanel.Height = 0;
-                this.Padding = new Padding(0, 0, 0, 0);
-            }
-            else
-            {
-                TitlePanel.Visible = true;
-                TitlePanel.Height = GetTitleBarHeight();
-                SpacePanel.Visible = true;
-                SpacePanel.Height = 1;
-                this.Padding = new Padding(1, 1, 1, 1);
-            }
+            TitlePanel.Visible = !isMaximized;
+            TitlePanel.Height = isMaximized ? 0 : FormEx.GetTitleBarHeight();
+            SpacePanel.Visible = !isMaximized;
+            SpacePanel.Height = isMaximized ? 0 : 1;
+            this.Padding = isMaximized ? new Padding(0, 0, 0, 0) : new Padding(1, 1, 1, 1);
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)

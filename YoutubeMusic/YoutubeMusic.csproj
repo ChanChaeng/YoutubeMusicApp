@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Extension\FormEx.cs" />
     <Compile Include="Extension\TitleBar.cs" />
     <Compile Include="Extension\YMusicEx.cs" />
     <Compile Include="Form1.cs">
