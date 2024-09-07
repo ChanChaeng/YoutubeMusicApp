@@ -17,7 +17,6 @@ namespace YoutubeMusic
         public static string cachePath = Path.Combine(settingsPath, "Cache");
 
         public static bool IsSimpleMode = false;
-        public static bool IsLoadEnd = false;
         public static string navBarZ;
         public static string playerBarZ;
 
