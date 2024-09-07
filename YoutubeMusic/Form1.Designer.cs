@@ -31,15 +31,14 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.login_check_timer = new System.Windows.Forms.Timer(this.components);
-            this.memory_manager_timer = new System.Windows.Forms.Timer(this.components);
             this.BrowserPanel = new System.Windows.Forms.Panel();
             this.TitlePanel = new System.Windows.Forms.Panel();
-            this.SpacePanel = new System.Windows.Forms.Panel();
             this.SimpleModeButton = new System.Windows.Forms.Button();
             this.BackButton = new System.Windows.Forms.Button();
             this.Minimize_Button = new System.Windows.Forms.Button();
             this.MaximizeButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.SpacePanel = new System.Windows.Forms.Panel();
             this.TitlePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,18 +47,13 @@
             this.login_check_timer.Interval = 200;
             this.login_check_timer.Tick += new System.EventHandler(this.login_check_timer_Tick);
             // 
-            // memory_manager_timer
-            // 
-            this.memory_manager_timer.Interval = 500;
-            this.memory_manager_timer.Tick += new System.EventHandler(this.memory_manager_timer_Tick);
-            // 
             // BrowserPanel
             // 
             this.BrowserPanel.BackColor = System.Drawing.SystemColors.Control;
             this.BrowserPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BrowserPanel.Location = new System.Drawing.Point(4, 37);
+            this.BrowserPanel.Location = new System.Drawing.Point(0, 33);
             this.BrowserPanel.Name = "BrowserPanel";
-            this.BrowserPanel.Size = new System.Drawing.Size(792, 409);
+            this.BrowserPanel.Size = new System.Drawing.Size(800, 417);
             this.BrowserPanel.TabIndex = 0;
             // 
             // TitlePanel
@@ -71,21 +65,12 @@
             this.TitlePanel.Controls.Add(this.MaximizeButton);
             this.TitlePanel.Controls.Add(this.ExitButton);
             this.TitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TitlePanel.Location = new System.Drawing.Point(4, 4);
+            this.TitlePanel.Location = new System.Drawing.Point(0, 0);
             this.TitlePanel.Name = "TitlePanel";
             this.TitlePanel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.TitlePanel.Size = new System.Drawing.Size(792, 33);
+            this.TitlePanel.Size = new System.Drawing.Size(800, 33);
             this.TitlePanel.TabIndex = 1;
             this.TitlePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TitlePanel_MouseDown);
-            // 
-            // SpacePanel
-            // 
-            this.SpacePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(19)))), ((int)(((byte)(19)))));
-            this.SpacePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SpacePanel.Location = new System.Drawing.Point(4, 37);
-            this.SpacePanel.Name = "SpacePanel";
-            this.SpacePanel.Size = new System.Drawing.Size(792, 1);
-            this.SpacePanel.TabIndex = 2;
             // 
             // SimpleModeButton
             // 
@@ -131,7 +116,7 @@
             this.Minimize_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Minimize_Button.Font = new System.Drawing.Font("Segoe UI", 15F);
             this.Minimize_Button.ForeColor = System.Drawing.Color.White;
-            this.Minimize_Button.Location = new System.Drawing.Point(696, 0);
+            this.Minimize_Button.Location = new System.Drawing.Point(704, 0);
             this.Minimize_Button.Name = "Minimize_Button";
             this.Minimize_Button.Size = new System.Drawing.Size(32, 32);
             this.Minimize_Button.TabIndex = 3;
@@ -148,7 +133,7 @@
             this.MaximizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MaximizeButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeButton.ForeColor = System.Drawing.Color.White;
-            this.MaximizeButton.Location = new System.Drawing.Point(728, 0);
+            this.MaximizeButton.Location = new System.Drawing.Point(736, 0);
             this.MaximizeButton.Name = "MaximizeButton";
             this.MaximizeButton.Size = new System.Drawing.Size(32, 32);
             this.MaximizeButton.TabIndex = 2;
@@ -165,12 +150,21 @@
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ExitButton.Font = new System.Drawing.Font("Segoe UI", 13.25F);
             this.ExitButton.ForeColor = System.Drawing.Color.White;
-            this.ExitButton.Location = new System.Drawing.Point(760, 0);
+            this.ExitButton.Location = new System.Drawing.Point(768, 0);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(32, 32);
             this.ExitButton.TabIndex = 0;
             this.ExitButton.UseVisualStyleBackColor = false;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
+            // 
+            // SpacePanel
+            // 
+            this.SpacePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(19)))), ((int)(((byte)(19)))));
+            this.SpacePanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SpacePanel.Location = new System.Drawing.Point(0, 33);
+            this.SpacePanel.Name = "SpacePanel";
+            this.SpacePanel.Size = new System.Drawing.Size(800, 1);
+            this.SpacePanel.TabIndex = 2;
             // 
             // Form1
             // 
@@ -184,13 +178,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Padding = new System.Windows.Forms.Padding(4);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Youtube Music";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.YoutubeMusic_FormClosing);
             this.Load += new System.EventHandler(this.YoutubeMusic_Load);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
-            this.MouseHover += new System.EventHandler(this.Form1_MouseHover);
             this.Move += new System.EventHandler(this.Form1_Move);
             this.TitlePanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -200,7 +192,6 @@
         #endregion
 
         private System.Windows.Forms.Timer login_check_timer;
-        private System.Windows.Forms.Timer memory_manager_timer;
         private System.Windows.Forms.Panel BrowserPanel;
         private System.Windows.Forms.Panel TitlePanel;
         private System.Windows.Forms.Button ExitButton;

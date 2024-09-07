@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using YoutubeMusic.Extension;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace YoutubeMusic
 {
@@ -18,56 +20,48 @@ namespace YoutubeMusic
         public Form1()
         {
             InitializeComponent();
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.DoubleBuffered = true;
         }
 
-        private const int WM_NCHITTEST = 0x84;
-        private const int HTCLIENT = 0x1;
-        private const int HTCAPTION = 0x2;
-        private const int HTLEFT = 0xA;
-        private const int HTRIGHT = 0xB;
-        private const int HTTOP = 0xC;
-        private const int HTTOPLEFT = 0xD;
-        private const int HTTOPRIGHT = 0xE;
-        private const int HTBOTTOM = 0xF;
-        private const int HTBOTTOMLEFT = 0x10;
-        private const int HTBOTTOMRIGHT = 0x11;
+        // Form Border
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            int BORDER_SIZE = 4;
+            Color color = Color.FromArgb(255, 33, 33, 33);
+            ControlPaint.DrawBorder(e.Graphics, ClientRectangle,
+                                         color, BORDER_SIZE, ButtonBorderStyle.Solid,
+                                         color, BORDER_SIZE, ButtonBorderStyle.Solid,
+                                         color, BORDER_SIZE, ButtonBorderStyle.Solid,
+                                         color, BORDER_SIZE, ButtonBorderStyle.Solid);
+            base.OnPaint(e);
+        }
 
+        // Form Resize
         protected override void WndProc(ref Message m)
         {
-            base.WndProc(ref m);
+            const int WM_NCHITTEST = 0x84;
+            const int HTLEFT = 10, HTRIGHT = 11, HTTOP = 12, HTTOPLEFT = 13,
+                      HTTOPRIGHT = 14, HTBOTTOM = 15, HTBOTTOMLEFT = 16, HTBOTTOMRIGHT = 17;
 
-            if (!Config.IsSimpleMode && m.Msg == WM_NCHITTEST)
+            if (m.Msg == WM_NCHITTEST)
             {
                 var cursorPos = this.PointToClient(Cursor.Position);
-                const int resizeAreaSize = 10;
+                const int thickness = 30;
+                const int areaSize = 10;
 
-                if (cursorPos.X <= resizeAreaSize)
+                if (cursorPos.Y < GetTitleBarHeight()) m.Result = IntPtr.Zero;
+                else if(cursorPos.X >= this.ClientSize.Width - thickness) // Right edge
                 {
-                    if (cursorPos.Y <= resizeAreaSize)
-                        m.Result = (IntPtr)HTTOPLEFT;
-                    else if (cursorPos.Y >= this.ClientSize.Height - resizeAreaSize)
-                        m.Result = (IntPtr)HTBOTTOMLEFT;
-                    else
-                        m.Result = (IntPtr)HTLEFT;
+                    m.Result = cursorPos.Y >= this.ClientSize.Height - areaSize ? (IntPtr)HTBOTTOMRIGHT : (IntPtr)HTRIGHT;
                 }
-                else if (cursorPos.X >= this.ClientSize.Width - resizeAreaSize)
-                {
-                    if (cursorPos.Y <= resizeAreaSize)
-                        m.Result = (IntPtr)HTTOPRIGHT;
-                    else if (cursorPos.Y >= this.ClientSize.Height - resizeAreaSize)
-                        m.Result = (IntPtr)HTBOTTOMRIGHT;
-                    else
-                        m.Result = (IntPtr)HTRIGHT;
-                }
-                else if (cursorPos.Y <= resizeAreaSize)
-                {
-                    m.Result = (IntPtr)HTTOP;
-                }
-                else if (cursorPos.Y >= this.ClientSize.Height - resizeAreaSize)
-                {
-                    m.Result = (IntPtr)HTBOTTOM;
-                }
+                else if (cursorPos.Y >= this.ClientSize.Height - thickness) m.Result = (IntPtr)HTBOTTOM;
+                else m.Result = IntPtr.Zero;
+
+                return;
             }
+
+            base.WndProc(ref m);
         }
 
         private void SimpleToOriginResolution(float scale)
@@ -158,6 +152,7 @@ namespace YoutubeMusic
             ResizeFormWithResolution(scale: 0.8f);
         }
 
+        private EventHandler<FrameLoadEndEventArgs> handler = null;
         private async void YoutubeMusic_Load(object sender, EventArgs e)
         {
             InitUI();
@@ -174,20 +169,23 @@ namespace YoutubeMusic
             this.Controls.Add(overlayPanel);
             overlayPanel.BringToFront();
 
-            Config.browser.FrameLoadEnd += async (_, args) =>
+            handler = async (_, args) =>
             {
+                // Remove event handler
+                Config.browser.FrameLoadEnd -= handler;
+
                 this.Invoke(new Action(() =>
                 {
                     Controls.Remove(overlayPanel);
                     overlayPanel.Dispose();
                 }));
-
                 await YMusicEx.InjectMouseMoveScriptAsync(); // Injection Mouse Move Event Listener
+                MemoryManager.StartMemoryManagement(MemoryManagerMode.Low);
             };
+            Config.browser.FrameLoadEnd += handler;
             Config.browser.JavascriptMessageReceived += Browser_JavascriptMessageReceived; // Mouse Move Receive
 
             login_check_timer.Enabled = !CheckLoginStatus();
-            memory_manager_timer.Enabled = true;
         }
 
         private void Browser_JavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
@@ -257,36 +255,6 @@ namespace YoutubeMusic
                 Config.browser.Load("https://music.youtube.com/");
                 login_check_timer.Enabled = false;
             }
-        }
-
-        private void memory_manager_timer_Tick(object sender, EventArgs e)
-        {
-            if (Config.browser == null || Config.browser.IsDisposed) return;
-
-            // 메모리 사용량에 따라 30%로 제한
-            // Limit to 30% depending on memory usage
-            Process[] subprocesses = Process.GetProcessesByName("CefSharp.BrowserSubprocess");
-            foreach (var subprocess in subprocesses)
-            {
-                long currentMemoryUsage = subprocess.WorkingSet64;
-                long currentMemoryMB = (long)(currentMemoryUsage / 1024 / 1024);
-                float factor = 0.3f;
-
-                long maxMemoryUsage = (long)(currentMemoryMB * factor);
-                MemoryManager.LimitMemoryUsage(subprocess, maxMemoryMB: maxMemoryUsage);
-            }
-
-            // Myself Limit memory usage to 10MB
-            MemoryManager.LimitMemoryUsage(Process.GetCurrentProcess(), maxMemoryMB: 10);
-
-            //GC.Collect();
-            //GC.WaitForPendingFinalizers();
-            Config.browser.ExecuteScriptAsync("window.gc();");
-        }
-
-        private void Form1_MouseHover(object sender, EventArgs e)
-        {
-            if (!Config.IsSimpleMode) this.Cursor = Cursors.SizeWE;
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
