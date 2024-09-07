@@ -317,9 +317,9 @@ namespace YoutubeMusic
         private async Task ChangeSimpleMode(bool enbled)
         {
             //stuttering effect by first reducing the form size before hiding the elements
+            await YMusicEx.ChangeZIndexAsync(enbled);
             if (enbled) this.Size = new Size(1160, 90 + TitlePanel.Height);
 
-            await YMusicEx.ChangeZIndexAsync(enbled);
             await YMusicEx.DisableDrawerAsync(enbled);
             await YMusicEx.DisableScrollAsync(enbled);
 

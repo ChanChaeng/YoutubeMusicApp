@@ -38,6 +38,8 @@ namespace YoutubeMusic
             settings.CefCommandLineArgs.Add("disable-logging");
 
             settings.CefCommandLineArgs.Add("no-first-run");
+            settings.CefCommandLineArgs.Add("disable-application-cache", "1");
+
             //settings.CefCommandLineArgs.Add("js-flags", "--max-old-space-size=128"); //Low(unstable) = 96, average(Sometimes unstable) = 128
             //settings.CefCommandLineArgs.Add("disk-cache-size", "10485760"); // 10MB (Don't limit cache size, maintain performance)
 
