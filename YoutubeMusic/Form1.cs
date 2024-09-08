@@ -40,6 +40,18 @@ namespace YoutubeMusic
             base.OnPaint(e);
         }
 
+        // Minimize from taskbar
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.Style |= 0x20000; // WS_MINIMIZEBOX
+                cp.ClassStyle |= 0x8; // CS_DBLCLKS
+                return cp;
+            }
+        }
+
         // Form Resize
         protected override void WndProc(ref Message m)
         {
@@ -59,8 +71,7 @@ namespace YoutubeMusic
                     m.Result = cursorPos.Y >= this.ClientSize.Height - areaSize ? (IntPtr)HTBOTTOMRIGHT : (IntPtr)HTRIGHT;
                 }
                 else if (cursorPos.Y >= this.ClientSize.Height - thickness) m.Result = (IntPtr)HTBOTTOM;
-                else m.Result = IntPtr.Zero;
-
+                else base.WndProc(ref m);
                 return;
             }
 
