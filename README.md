@@ -28,10 +28,9 @@ Playwright로 크롬 대신 엣지를 사용할 때 PWA기반인 유튜브 뮤�
 
 ### 메모리 사용량
 ![MemoryUsage](https://github.com/ChanChaeng/YoutubeMusicApp/blob/master/img/YoutubeMusicMemory.png)  
-- 최저 - 10~20/MB
-- 평균 - 30~40/MB
-- 최대 - 100~250/MB (간헐적으로 메모리 사용률이 증가함)  
-- [Firemin](https://github.com/Sylfaen2/Firemin)을 참고하여 간단하게 구현했습니다
+- 경량 모드 - 프로세스당 최대 45/MB 제한
+- 기본 모드 - 프로세스당 최대 70/MB 제한
+- 성능 모드 - 프로세스당 최대 100/MB 제한
 <br><br>
 
 ### 캐시 및 쿠키 삭제 (로그인 정보 삭제)

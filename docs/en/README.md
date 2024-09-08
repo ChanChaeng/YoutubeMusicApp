@@ -24,10 +24,9 @@ so I wanted to listen to music while doing that work, so I created this program 
 
 ### Memory Usage
 ![MemoryUsage](https://github.com/ChanChaeng/YoutubeMusicApp/blob/master/img/YoutubeMusicMemory.png)  
-- Minimum - 10~20/MB
-- Average - 30~40/MB
-- Maximum - 100~250/MB (intermittent memory usage increases)
-- I implemented the function simply by referring to [Firemin](https://github.com/Sylfaen2/Firemin)
+- Low mode - limited to 45/MB per process
+- Default mode - limited to 70/MB per process
+- Performance mode - limited to 100/MB per process
 <br><br>
 
 ### Delete cache and cookies (Delete login session)
