@@ -24,7 +24,7 @@ namespace YoutubeMusic.Extension
         private static int _checkInterval = 500;
         private static double _memoryThreshold = 0.8;
 
-        public static async void StartMemoryManagement(MemoryManagerMode mode)
+        public static async void Start(MemoryManagerMode mode)
         {
             _memoryCts = new CancellationTokenSource();
 
@@ -39,7 +39,8 @@ namespace YoutubeMusic.Extension
             // GC calls and browser memory cleanup
             while (!_memoryCts.Token.IsCancellationRequested)
             {
-                await Task.Delay(30000, _memoryCts.Token);
+                try { await Task.Delay(30000, _memoryCts.Token); }
+                catch { break; }
 
                 Config.browser.ExecuteScriptAsync("window.gc();");
 
@@ -50,6 +51,12 @@ namespace YoutubeMusic.Extension
                     GC.WaitForPendingFinalizers();
                 }
             }
+        }
+
+        public static void Stop()
+        {
+            _memoryCts?.Cancel();
+            _memoryCts?.Dispose();
         }
 
         private static async Task ManageMemoryAsync(Process process, long maxMemoryMB, CancellationToken cancellationToken)

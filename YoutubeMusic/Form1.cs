@@ -112,8 +112,9 @@ namespace YoutubeMusic
                     Controls.Remove(overlayPanel);
                     overlayPanel.Dispose();
                 }));
+
                 await YMusicEx.InjectMouseMoveScriptAsync(); // Injection Mouse Move Event Listener
-                MemoryManager.StartMemoryManagement(MemoryManagerMode.Low);
+                MemoryManager.Start(MemoryManagerMode.Low);
             };
             Config.browser.FrameLoadEnd += handler;
             Config.browser.JavascriptMessageReceived += Browser_JavascriptMessageReceived; // Mouse Move Receive
@@ -153,6 +154,7 @@ namespace YoutubeMusic
         private async Task ClearCache() => await Config.browser.GetDevToolsClient().Network.ClearBrowserCacheAsync();
         private async void YoutubeMusic_FormClosing(object sender, FormClosingEventArgs e)
         {
+            MemoryManager.Stop();
             await ClearCache();
             Cef.Shutdown();
 
